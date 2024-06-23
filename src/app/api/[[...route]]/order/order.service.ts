@@ -1,8 +1,8 @@
 import pagination, { type TQueryPage } from "~/utils/pagination";
 import * as orderRepo from "~/repository/order";
-import type { OrderProps } from "~/repository/order";
+import * as orderType from "~/type/order";
 
-export const createOrder = async (create: OrderProps) => {
+export const createOrder = async (create: orderType.OrderProps) => {
   const order = await orderRepo.createOrder(create);
 
   return order;
@@ -20,7 +20,7 @@ export const getsOrder = async ({ page, perPage }: TQueryPage) => {
 };
 
 export const getOrder = async (id: string) => {
-  const order = await orderRepo.getOrderFirst({ where: { id } });
+  const order = await orderRepo.getOrderFirst(id);
 
   return order;
 };

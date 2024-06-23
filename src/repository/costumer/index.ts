@@ -45,11 +45,7 @@ export function updateCustamer(input: UpdateCustomerProps) : Promise<Custamer> {
   const custamer = db.custamer.update({
     where: { id: input.id },
     data: {
-      name: input.name,
-      image: input.image,
-      address: input.address,
-      email: input.email,
-      phone: input.phone,
+      isActive: input.isActive,
     },
   });
 

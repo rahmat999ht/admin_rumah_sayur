@@ -1,6 +1,7 @@
+import { Order } from "@prisma/client";
 import { api } from "~/trpc/server";
 import { type ICustomer } from "~/type/customer";
-import { type IOrder } from "~/type/order";
+// import { type IOrder } from "~/type/order";
 import { type IProduct } from "~/type/product";
 
 export const getAllCustomer = async () => {
@@ -9,7 +10,7 @@ export const getAllCustomer = async () => {
 };
 
 export const getAllOrder = async () => {
-  const initData = (await api.order.getAll.query()) as IOrder[];
+  const initData = (await api.order.getAll.query()) as Order[];
   return initData;
 };
 

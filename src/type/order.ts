@@ -28,8 +28,10 @@ export interface IOrder {
   totPrice: number;
   amount: number;
   orderById: string;
+  productId: string;
   createdAt: Date;
   updatedAt: Date;
-  product: Product[];
+  product: Product[]; // Assuming each order can have multiple products
   orderBy: Custamer;
 }
+

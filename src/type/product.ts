@@ -1,5 +1,3 @@
-// import { type IOrder } from "./order";
-
 export interface IProduct {
   id: string;
   name: string;
@@ -13,5 +11,5 @@ export interface IProduct {
   updatedAt: Date;
   createdBy?: string | null;
   createdById: string;
-  // order : IOrder;
+  // order: IOrder; // Uncomment this if you have a circular reference and handle it appropriately
 }

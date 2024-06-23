@@ -63,6 +63,7 @@ custamerRouter.put(
       email: userWithoutId.email,
       address: userWithoutId.address,
       phone: userWithoutId.phone,
+      isActive: userWithoutId.isActive,
     });
 
     logger.debug(customer);

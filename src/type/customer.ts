@@ -1,5 +1,6 @@
 import { z } from "zod";
-import type { Prisma,  Order } from "@prisma/client";
+import type { Order, Prisma } from "@prisma/client";
+import { IOrder } from './order';
 
 export type FindManyCustomerProps = Prisma.CustamerFindManyArgs;
 export type FindFirstCustomerProps = Prisma.CustamerFindFirstArgs;
@@ -19,6 +20,7 @@ export const custamerSchema = z.object({
   phone: z.string().min(1, "phone harus diisi"),
   address: z.string(),
   image: z.string(),
+  isActive: z.boolean(),
 });
 
 export interface ICustomer {
@@ -29,5 +31,5 @@ export interface ICustomer {
   address: string;
   image: string;
   isActive: boolean;
-  riwPes: Order[];
+  riwPes: Order[]; // Array of orders
 }
