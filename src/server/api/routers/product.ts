@@ -8,6 +8,7 @@ const idProductSchema = z.object({ id: z.string() });
 const productSchema = z.object({
   name: z.string().min(1),
   image: z.string().min(1),
+  hastag_ml: z.string().min(1),
   category: z.string().min(1),
   desc: z.string().min(1),
   price: z.number().min(1),
@@ -18,6 +19,7 @@ const productUpdateSchema = z.object({
   id: z.string().cuid(),
   name: z.string().min(1),
   image: z.string().min(1),
+  hastag_ml: z.string().min(1),
   category: z.string().min(1),
   desc: z.string().min(1),
   price: z.number().min(1),
@@ -26,10 +28,7 @@ const productUpdateSchema = z.object({
 
 export const productRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({}) => {
-    return productRepo.getsProduct({
-      orderBy: { createdAt: "desc" },
-      // where: { createdBy: { id: ctx.session.user.id } },
-    });
+    return productRepo.getsProduct();
   }),
 
   getOne: protectedProcedure.input(idProductSchema).query(({ ctx, input }) => {
@@ -50,6 +49,7 @@ export const productRouter = createTRPCRouter({
           name: input.name,
           image: input.image,
           category: input.category,
+          hastag_ml: input.hastag_ml,
           desc: input.desc,
           price: input.price,
           stock: input.stock,
