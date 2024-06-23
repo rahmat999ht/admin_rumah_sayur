@@ -1,7 +1,7 @@
 import { createOrder } from "~/repository/order";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { idOrderSchema, orderCreateSchema, orderUpdateSchema } from "~/type/order.schema";
+import { idOrderSchema, orderCreateSchema, orderUpdateSchema } from "~/type/order";
 
 export const orderRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
