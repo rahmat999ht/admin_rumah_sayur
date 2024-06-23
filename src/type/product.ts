@@ -3,7 +3,6 @@ export interface IProduct {
   name: string;
   image: string;
   category: string;
-  hastag_ml: string;
   desc: string;
   stock: number;
   price: number;
