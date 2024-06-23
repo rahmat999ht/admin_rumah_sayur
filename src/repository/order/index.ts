@@ -1,19 +1,6 @@
-import type { Order, Prisma } from "@prisma/client";
-import { type z } from "zod";
+import type { Order } from "@prisma/client";
 import { db } from "~/server/db";
-import type {
-  orderCreateSchema,
-} from "~/type/order.schema";
-// import { type TCreateOrderProps } from "~/type/order";
-
-// type createOrder = ;
-
-export type FindManyProps = Prisma.OrderFindManyArgs | undefined;
-export type OrderProps = z.infer<typeof orderCreateSchema>;
-export type OrderWhereProps = Prisma.OrderWhereUniqueInput;
-
-export type FindFirstProps = Prisma.OrderFindFirstArgs;
-export type FindUniqProps = Prisma.OrderFindUniqueArgs;
+import { type OrderProps } from "~/type/order";
 
 export function createOrder(input: OrderProps): Promise<Order> {
   return db.order.create({
@@ -27,18 +14,27 @@ export function createOrder(input: OrderProps): Promise<Order> {
   });
 }
 
-export function getOrderFirst(findFirstProps: FindFirstProps) {
-  return db.order.findFirst(findFirstProps);
+export function getOrderFirst(id: string): Promise<Order> {
+  return db.order.findFirst({
+    where: { id },
+    orderBy: { createdAt: "desc" },
+    include: {
+      product: true,
+      orderBy: true,
+    },
+  })as Promise<Order>;
 }
 
-export function getOrderUniq(fineManyProps: FindUniqProps) {
-  return db.order.findUnique(fineManyProps);
+export function getsOrder(): Promise<Order[]> {
+  return db.order.findMany({
+    orderBy: { createdAt: "desc" },
+    include: {
+      product: true,
+      orderBy: true,
+    },
+  }) as Promise<Order[]>;
 }
 
-export function getsOrder(fineManyProps: FindManyProps): Promise<Order[]> {
-  return db.order.findMany(fineManyProps) as Promise<Order[]>;
-}
-
-export function getsOrderCount() {
-  return db.product.count();
+export function getsOrderCount() : Promise<number> {
+  return db.product.count() as Promise<number>;
 }

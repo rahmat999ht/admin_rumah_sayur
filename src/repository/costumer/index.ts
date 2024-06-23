@@ -1,77 +1,48 @@
 import type { Custamer, Prisma } from "@prisma/client";
-import { type z } from "zod";
 import { db } from "~/server/db";
-import type { custamerSchema } from "~/type/customer.schema";
+import type {
+  FindManyCustomerProps,
+  UpdateCustomerProps,
+} from "~/type/customer";
 
-// /**
-//  * Retrieves a list of users from the database, filtering and selecting fields based on the provided arguments.
-//  *
-//  * @param userFindManyArgs - Optional filtering and selection criteria to apply to the query.
-//  */
-// export const getUsers = (userFindManyArgs: TFindManyUser = undefined) => {
-//   const users = db.custamer.findMany({
-//     select: selectUserWithoutPass,
-//     orderBy: {
-//       email: "asc",
-//     },
-//     ...userFindManyArgs,
-//   });
-
-//   return users;
-// };
-
-export type FindManyProps = Prisma.CustamerFindManyArgs;
-export type FindFirstProps = Prisma.CustamerFindFirstArgs;
-export type CustomerProps = z.infer<typeof custamerSchema>;
-
-export function getsCustomer(fineManyProps: FindManyProps) {
-  return db.custamer.findMany(fineManyProps) as Promise<Custamer[]>;
+export function getsCustomer(fineManyProps: FindManyCustomerProps) : Promise<Custamer[]> {
+  return db.custamer.findMany(fineManyProps) ;
 }
 
+export function getCustamerCount() : Promise<number>{
+  const custamerCount = db.custamer.count();
 
-export const getCustamerCount = () => {
-  const usersCount = db.custamer.count();
-
-  return usersCount;
-};
-
-/**
- * Retrieves a single user from the database based on the provided unique identifier.
- *
- * @param where - The unique identifier to search for the user by.
- */
-export const getCustamerByUniq = (where: Prisma.CustamerFindUniqueArgs) => {
-  const user = db.custamer.findUnique(where);
-
-  return user;
-};
-
-export function getCustamerFirst(findFirstProps: FindFirstProps) {
-  return db.custamer.findFirst(findFirstProps);
+  return custamerCount;
 }
 
-/**
- * Creates a new user record in the database.
- *
- * @param data - The user data to insert into the database.
- */
-export const createCustamer = (data: Prisma.CustamerCreateInput) => {
-  const user = db.custamer.create({
-    data,
+export function getCustamerByUniq(where: Prisma.CustamerFindUniqueArgs) {
+  const custamer = db.custamer.findUnique(where);
+
+  return custamer;
+}
+
+export function getCustamerFirst(id: string)  {
+  return db.custamer.findFirst({
+    where: { id },
+    include: {
+      riwPes: true,
+    },
+  });
+}
+
+export function createCustamer(data: Prisma.CustamerCreateInput) : Promise<Custamer> {
+  const custamer = db.custamer.create({
+    data: {
+      email: data.email,
+      isActive: true,
+    },
   });
 
-  return user;
-};
+  return custamer;
+}
 
-// /**
-//  * Updates an existing user record in the database.
-//  *
-//  * @param data - The updated user data. Must include the user's id to identify the record to update.
-//  */
-export const updateCustamer = (
-  input: CustomerProps,
-) => {
-  const user = db.custamer.update({
+export function updateCustamer(input: UpdateCustomerProps) : Promise<Custamer> {
+  const custamer = db.custamer.update({
     where: { id: input.id },
     data: {
       name: input.name,
@@ -82,18 +53,5 @@ export const updateCustamer = (
     },
   });
 
-  return user;
-};
-
-// /**
-//  * Deletes a user record from the database.
-//  *
-//  * @param where - The unique identifier of the user record to delete.
-//  */
-// export const deleteUser = (where: TWhereUniqueUser) => {
-//   const user = prisma.user.delete({
-//     where,
-//   });
-
-//   return user;
-// };
+  return custamer;
+}
