@@ -47,7 +47,6 @@ export const FormCreateProduct: NextPage = () => {
     if (selectedFile) {
 
       const imageUrl = 'https://jveklamhmwopbnjswgas.supabase.co/storage/v1/object/images/sayur/';
-     
       const imageName = Date.now().toString() + selectedFile.name;
       const { data, error } = await supabase.storage
         .from("images")
