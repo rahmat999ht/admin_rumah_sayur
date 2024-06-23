@@ -8,7 +8,7 @@ import CameraIcon from "public/icons/CameraIcon";
 // import { type NextPage } from "next";
 import { supabase } from "~/utils/supabase";
 import styles from "./product.module.css";
-import { IProduct } from "~/type/iProduct";
+import { IProduct } from "~/type/product";
 
 interface UpdateProductProps {
   data: IProduct;

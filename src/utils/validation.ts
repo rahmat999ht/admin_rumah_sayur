@@ -4,7 +4,7 @@ import * as costamerRepo from "~/repository/costumer";
 
 export const validateCreateUser = async (data: Prisma.CustamerCreateInput) => {
   const [checkEmail] = await Promise.all([
-    costamerRepo.getUserByUniq({
+    costamerRepo.getCustamerByUniq({
       where: {
         email: data.email ?? "",
         // name: data.name ?? "",
