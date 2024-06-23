@@ -1,18 +1,19 @@
-import { createOrder } from "~/repository/order";
+import * as orderRepo from "~/repository/order";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { idOrderSchema, orderCreateSchema, orderUpdateSchema } from "~/type/order";
 
 export const orderRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.order.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        product : true,
-        orderBy : true,
-      }
-      // where: { createdBy: { id: ctx.session.user.id } },
-    });
+    return orderRepo.getsOrder();
+    // return ctx.db.order.findMany({
+    //   orderBy: { createdAt: "desc" },
+    //   include: {
+    //     product : true,
+    //     orderBy : true,
+    //   }
+    //   // where: { createdBy: { id: ctx.session.user.id } },
+    // });
   }),
 
   getOne: protectedProcedure.input(idOrderSchema).query(({ ctx, input }) => {
@@ -31,7 +32,7 @@ export const orderRouter = createTRPCRouter({
       // simulate a slow db call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      return createOrder(input);
+      return orderRepo.createOrder(input);
     }),
 
   update: protectedProcedure
