@@ -18,8 +18,6 @@ export const FormCreateProduct: NextPage = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [uploading, setUploading] = useState(false);
-  const [identifyLoading, setIdentifyLoading] = useState(false);
-
 
   const imageRef = useRef<HTMLImageElement | null>(null);
 
@@ -47,9 +45,9 @@ export const FormCreateProduct: NextPage = () => {
   const handleSubmit = async () => {
     setUploading(true);
     if (selectedFile) {
-      const imageUrl =
-        "https://omhmokdygpqbhwdtshvk.supabase.co/storage/v1/object/public/images/sayur/";
 
+      const imageUrl = 'https://jveklamhmwopbnjswgas.supabase.co/storage/v1/object/images/sayur/';
+     
       const imageName = Date.now().toString() + selectedFile.name;
       const { data, error } = await supabase.storage
         .from("images")
@@ -64,7 +62,9 @@ export const FormCreateProduct: NextPage = () => {
       });
       setUploading(false);
       console.log("berhasil guys");
-
+      console.log('key', process.env.NEXT_PUBLIC_SUPABASE_KEY);
+      console.log(imageUrl + imageName);
+      console.log('selectedFile', selectedFile);
       if (data) {
         console.log(data);
       } else if (error) {
