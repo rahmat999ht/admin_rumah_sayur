@@ -1,12 +1,11 @@
-import React from "react";
-import { api } from "~/trpc/server";
-import TableTransaction from "~/app/_components/transaction/table_trans";
-import { type IOrder } from "~/type/order.schema";
+import TransactionView from "./view";
+import { getAllOrder } from "~/services/admin.service";
+import { type IOrder } from "~/type/order";
 
-const Product: React.FC = async () => {
-  const data: IOrder[] = await api.order.getAll.query() as IOrder[];
- 
-  return <TableTransaction data={data} />;
+const TransactionPage: React.FC = async () => {
+  const data: Promise<IOrder[]> = getAllOrder();
+
+  return <TransactionView data={data} />;
 };
 
-export default Product;
+export default TransactionPage;

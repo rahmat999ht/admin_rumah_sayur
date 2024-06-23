@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Fresha",
+  title: "Rumah Sayur",
   description: "Web Admin",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };

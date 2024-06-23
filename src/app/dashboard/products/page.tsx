@@ -1,18 +1,11 @@
-import React from "react";
-import { type IProduct } from "~/type/iProduct";
-import { api } from "~/trpc/server";
-import TableProduct from "../../_components/product/table_product";
-// import { Pagination } from "@nextui-org/react";
+import ProductView from "./view";
+import { getAllProduct } from "~/services/admin.service";
+import { type IProduct } from "~/type/product";
 
-// interface Response {
-//   data: IProduct[];
-// }
+const ProductPage: React.FC = async () => {
+  const data: Promise<IProduct[]> = getAllProduct();
 
-const Product: React.FC = async () => {
-  const data: IProduct[] = await api.product.getAll.query() as IProduct[];
-  // const {data} : Response = await api.product.getAll.query();
-
-  return <TableProduct data={data} />;
+  return <ProductView data={data} />;
 };
 
-export default Product;
+export default ProductPage;

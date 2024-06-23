@@ -1,28 +1,31 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type ChangeEvent, useState, useEffect, useRef } from "react";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { Input, Button, Image } from "@nextui-org/react";
 import { api } from "~/trpc/react";
 import CameraIcon from "public/icons/CameraIcon";
-import { type NextPage } from "next";
+// import { type NextPage } from "next";
 import { supabase } from "~/utils/supabase";
-import * as mobilenet from "@tensorflow-models/mobilenet";
+import styles from "./product.module.css";
+import { IProduct } from "~/type/iProduct";
 
-export const CreateProduct: NextPage = () => {
+interface UpdateProductProps {
+  data: IProduct;
+}
+
+export const FormUpdateProduct = ({ data }: UpdateProductProps) => {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
-  const [hastag, setHastag] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
-  const [selectedImage, setSelectedImage] = useState("");
+  const [name, setName] = useState(data.name);
+  const [category, setCategory] = useState(data.category);
+  const [description, setDescription] = useState(data.desc);
+  const [price, setPrice] = useState(data.price);
+  const [stock, setStock] = useState(data.stock);
+  const [selectedImage, setSelectedImage] = useState(data.image);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [uploading, setUploading] = useState(false);
-
   const imageRef = useRef<HTMLImageElement | null>(null);
-  // const fileInputRef = useRef();
+  const dataId = data.id;
 
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -32,12 +35,11 @@ export const CreateProduct: NextPage = () => {
     }
   };
 
-  const createNewProduct = api.product.create.useMutation({
+  const createNewProduct = api.product.update.useMutation({
     onSuccess: () => {
       router.refresh();
       setName("");
       setCategory("");
-      setHastag("");
       setDescription("");
       setPrice(0);
       setStock(0);
@@ -49,23 +51,20 @@ export const CreateProduct: NextPage = () => {
   const handleSubmit = async () => {
     setUploading(true);
     if (selectedFile) {
-      const imageUrl =
-        "https://omhmokdygpqbhwdtshvk.supabase.co/storage/v1/object/public/images/sayur/";
-
-      const imageName = Date.now().toString() + selectedFile.name;
       const { data, error } = await supabase.storage
         .from("images")
-        .upload("sayur/" + imageName, selectedFile);
+        .upload("sayur/" + selectedFile.name, selectedFile);
       createNewProduct.mutate({
+        id: dataId,
         name: name,
-        image: imageUrl + imageName,
+        image: selectedFile.name,
         category: category,
-        hastag_ml: hastag,
         desc: description,
         price: price,
         stock: stock,
       });
       setUploading(false);
+      console.log("berhasil guys");
       console.log("berhasil guys");
 
       if (data) {
@@ -74,16 +73,17 @@ export const CreateProduct: NextPage = () => {
         console.log(error);
       }
     }
+    setUploading(false);
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-      className="flex flex-col gap-2"
-    >
-      <div className="flex w-full flex-col gap-8">
+    <div className="flex w-full flex-col gap-8">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+        className="flex flex-col gap-2"
+      >
         <div className="mb-6 flex w-full flex-wrap gap-4 md:mb-0 md:flex-nowrap">
           <div className="flex w-80 flex-col gap-4">
             <label>
@@ -112,16 +112,28 @@ export const CreateProduct: NextPage = () => {
                 )}
               </div>
             </label>
+           
           </div>
-          <Input
-            value={selectedFile ? selectedFile.name : "Image Kosong"}
-            type="text"
-            disabled
-            variant="flat"
-            label="Image"
-          />
+          <div className="flex w-full flex-col gap-4">
+            <Input
+              value={selectedFile ? selectedFile.name : "Image Kosong"}
+              type="text"
+              disabled
+              variant="flat"
+              label="Image"
+            />
+            
+          </div>
         </div>
-        <div className="flex w-full flex-col gap-8">
+      </form>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+        className="flex flex-col gap-2"
+      >
+        <div className="flex w-full flex-col gap-6">
           <div className="mb-6 flex w-full flex-wrap gap-4 md:mb-0 md:flex-nowrap">
             <Input
               isRequired
@@ -141,14 +153,6 @@ export const CreateProduct: NextPage = () => {
             />
           </div>
           <div className="mb-6 flex w-full flex-wrap gap-4 md:mb-0 md:flex-nowrap">
-            <Input
-              isRequired
-              value={hastag}
-              onChange={(e) => setHastag(e.target.value)}
-              type="text"
-              variant="flat"
-              label="Hastag"
-            />
             <Input
               isRequired
               value={description}
@@ -176,19 +180,16 @@ export const CreateProduct: NextPage = () => {
               label="Stock"
             />
           </div>
+          <Button
+            type="submit"
+            color="success"
+            disabled={uploading}
+            onClick={handleSubmit}
+          >
+            {uploading ? "Submitting..." : "Submit"}
+          </Button>
         </div>
-
-        <Button
-          type="submit"
-          color="success"
-          disabled={uploading}
-          onClick={handleSubmit}
-        >
-          {uploading ? "Submitting..." : "Submit"}
-        </Button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
-
-// export default CreateProduct;

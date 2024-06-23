@@ -1,17 +1,43 @@
-.container {
-  background-color: var(--bgSoft);
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.title {
-  margin-bottom: 20px;
-  font-weight: 200;
-  color: var(--textSoft);
-}
-
-.spaceBetween {
+.search {
   display: flex;
-  justify-content: space-between;
-  align-items: center; /* Jika Anda ingin mengatur align-items */
+  align-items: center;
+  /* gap: 10px; */
+  background-color: #7de7ae;
+  padding: 10px;
+  border-radius: 10px;
+  height: 40px;
+}
+
+.input {
+  background-color: transparent;
+  border: none;
+  color: var(--text);
+}
+
+.confidence {
+  display: flex; /* Enables flexbox */
+  flex-direction: row; /* Stacks elements horizontally */
+  align-items: center; /* Aligns items vertically */
+  background-color: white; /* White background for the entire section */
+ }
+
+.confidenceText {
+  margin-right: 8px; /* Adds space between the text and "Best Guess" */
+}
+
+.bestGuess {
+  background-color: #09e359; /* White background for the label by default */
+  padding: 4px; /* Adds padding to the label */
+  border-radius: 4px; /* Rounds the corners */
+}
+
+.borderCard {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+.name {
+  font-weight: bold;
 }

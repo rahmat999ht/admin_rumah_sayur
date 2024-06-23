@@ -3,6 +3,7 @@ export interface IProduct {
   name: string;
   image: string;
   category: string;
+  desc: string;
   stock: number;
   price: number;
   createdAt: Date;

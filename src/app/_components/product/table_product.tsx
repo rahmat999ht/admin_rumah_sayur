@@ -10,18 +10,10 @@ import {
   User,
   Chip,
   Tooltip,
-  Card,
-  // CardHeader,
-  CardBody,
-  Pagination,
+  // Link,
 } from "@nextui-org/react";
 import { columns } from "public/data/products";
-// import Cards from "~/app/_components/dashboard/cards/cards";
-// import { cards } from "public/data/cards";
-import styles from "./product.module.css";
-import { MdAdd } from "react-icons/md";
-import { Button, Link } from "@nextui-org/react";
-import { type IProduct } from "~/type/iProduct";
+import { type IProduct } from "~/type/product";
 import React, { useState } from "react";
 import { EditIcon } from "public/icons/EditIcon";
 import { DeleteIcon } from "public/icons/DeleteIcon";
@@ -31,12 +23,14 @@ import { api } from "~/trpc/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { supabase } from "~/utils/supabase";
+import Link from "next/link";
 
 interface TableProductProps {
   data: IProduct[]; // Menggunakan React.ReactNode untuk menangani konten dinamis
+  bottomContent: React.ReactNode;
 }
 
-function TableProduct({ data }: TableProductProps) {
+function TableProduct({ data, bottomContent }: TableProductProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -48,18 +42,6 @@ function TableProduct({ data }: TableProductProps) {
     onError(error) {
       toast.success(`Gagal Menghapus Product, Pesan Error : ${error.message}`);
     },
-    // onSettled: async (values, error, value) => {
-    //   const utils = api.useUtils();
-    //   console.log("SETTLED", value);
-    //   await utils.pr.getAll.invalidate();
-    //   if (values) {
-    //     const name = values.name;
-    //     console.log("success", name);
-    //   } else if (error) {
-    //     // toast.error(`Error ${error.message}`);
-    //     console.log("error", error);
-    //   }
-    // },
   });
 
   const renderCell = React.useCallback(
@@ -104,6 +86,10 @@ function TableProduct({ data }: TableProductProps) {
         content: `Apakah anda yakin ingin menghapus product "${item.name}" ??`,
       };
 
+      // const handleEditClick = () => {
+      //   router.push(`/dashboard/products/${item.id}`);
+      // };
+
       switch (columnKey) {
         case "name":
           return (
@@ -143,7 +129,7 @@ function TableProduct({ data }: TableProductProps) {
                   </Tooltip>
                 }
               />
-              <Link href="/dashboard/products/updateProduct">
+              <Link href={`/dashboard/products/${item.id}`} passHref>
                 <Tooltip content="Edit product">
                   <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
                     <EditIcon />
@@ -177,56 +163,35 @@ function TableProduct({ data }: TableProductProps) {
   );
 
   return (
-    <Card className="px-1 py-1">
-      {/* <CardHeader className="flex-col items-start px-4 pb-0 pt-2">
-        <div className="my-4 grid grid-cols-2 flex-wrap gap-x-4 gap-y-4 sm:grid-cols-4">
-          {cards.map((item) => (
-            <Cards item={item} key={item.id} />
-          ))}
-        </div>
-      </CardHeader> */}
-      <CardBody className="overflow-visible py-2 ">
-        <div className={styles.container}>
-          <div className={styles.spaceBetween}>
-            <h2 className={styles.title}>Product Fresha</h2>
-            <Link
-              className={styles.title}
-              href="/dashboard/products/addProduct"
-            >
-              <Button color="success" startContent={<MdAdd />}>
-                Product
-              </Button>
-            </Link>
-          </div>
-          <Table aria-label="Example table with custom cells">
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn
-                  key={column.uid}
-                  align={column.uid === "actions" ? "center" : "start"}
-                >
-                  {column.name}
-                </TableColumn>
-              )}
-            </TableHeader>
-            <TableBody>
-              {data.map((item, index) => (
-                <TableRow key={index}>
-                  {(columnKey) => (
-                    <TableCell key={columnKey}>
-                      {renderCell(item, columnKey)}
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="my-4 flex  justify-center">
-          <Pagination color="warning" initialPage={3} total={10} />
-        </div>
-      </CardBody>
-    </Card>
+    <Table
+      aria-label="Example table with client side pagination"
+      bottomContent={bottomContent}
+      classNames={{
+        wrapper: "min-h-[222px]",
+      }}
+    >
+      <TableHeader columns={columns}>
+        {(column) => (
+          <TableColumn
+            key={column.uid}
+            align={column.uid === "actions" ? "center" : "start"}
+          >
+            {column.name}
+          </TableColumn>
+        )}
+      </TableHeader>
+      <TableBody>
+        {data.map((item, index) => (
+          <TableRow key={index}>
+            {(columnKey) => (
+              <TableCell key={columnKey}>
+                {renderCell(item, columnKey)}
+              </TableCell>
+            )}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }
 

@@ -66,7 +66,8 @@ const Sidebar: React.FC = async () => {
   return (
     <div className={styles.container}>
       <div className={styles.user}>
-        <FreshaImage />
+        {/* <FreshaImage /> */}
+        <h2>Rumah Sayur</h2>
       </div>
       <ul className={styles.list}>
         {menuItems.map((cat) => (
