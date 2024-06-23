@@ -1,5 +1,5 @@
 {
-  "name": "fresha_web",
+  "name": "rumah_sayur",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -69,6 +69,5 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.25.1"
-  },
-  "packageManager": "npm@10.2.3"
+  }
 }
