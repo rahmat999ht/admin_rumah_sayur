@@ -5,7 +5,7 @@ import { authMiddleware } from "../auth/auth.middelware";
 import logger from "~/utils/logger";
 import { HttpStatus } from "~/utils/http_status";
 import validatorSchemaMiddleware from "~/utils/validate_midleware";
-import { custamerSchema, idCustamerSchema } from "~/type/customer.schema";
+import { custamerSchema, idCustamerSchema } from "~/type/customer";
 import { queryPageSchema } from "~/utils/pagination";
 
 const custamerRouter = new Hono();
